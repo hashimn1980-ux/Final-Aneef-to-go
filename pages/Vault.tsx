@@ -65,7 +65,7 @@ const MagnifierImage: React.FC<{ src: string; caption: string; detail: string }>
   const [showMagnifier, setShowMagnifier] = useState(false);
   const [xy, setXY] = useState({ x: 0, y: 0 });
   const imgRef = useRef<HTMLImageElement>(null);
-  const magnifierSize = 150;
+  const magnifierSize = 160;
   const zoomLevel = 2.5;
 
   const handleMouseEnter = () => setShowMagnifier(true);
@@ -92,45 +92,48 @@ const MagnifierImage: React.FC<{ src: string; caption: string; detail: string }>
   return (
     <div className="relative group mb-12">
       <div 
-        className="relative overflow-hidden cursor-crosshair"
+        className="relative overflow-hidden cursor-crosshair rounded-sm"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onMouseMove={handleMouseMove}
       >
+        <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-700 pointer-events-none z-10"></div>
         <img
           ref={imgRef}
           src={src}
           alt={caption}
-          className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+          className="w-full h-auto object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-[1.5s] ease-out will-change-transform"
         />
 
         {/* The Loupe */}
         <div
           style={{
-            display: showMagnifier ? 'block' : 'none',
             position: 'absolute',
             pointerEvents: 'none',
             height: `${magnifierSize}px`,
             width: `${magnifierSize}px`,
             top: `${xy.y - magnifierSize / 2}px`,
             left: `${xy.x - magnifierSize / 2}px`,
-            opacity: 1,
-            border: '1px solid rgba(255, 255, 255, 0.5)',
+            opacity: showMagnifier ? 1 : 0,
+            transition: 'opacity 0.2s ease-out',
+            border: '1px solid rgba(183, 121, 92, 0.4)',
             backgroundColor: 'black',
             backgroundImage: `url('${src}')`,
             backgroundRepeat: 'no-repeat',
-            backgroundSize: `${imgRef.current ? imgRef.current.width * zoomLevel : 0}px ${imgRef.current ? imgRef.current.height * zoomLevel : 0}px`,
+            // We use offsetWidth to get the layout width, ignoring the scale transform for the background size base.
+            // This ensures the loupe zooms the 'original' image clearly.
+            backgroundSize: `${imgRef.current ? imgRef.current.offsetWidth * zoomLevel : 0}px ${imgRef.current ? imgRef.current.offsetHeight * zoomLevel : 0}px`,
             backgroundPositionX: `${-xy.x * zoomLevel + magnifierSize / 2}px`,
             backgroundPositionY: `${-xy.y * zoomLevel + magnifierSize / 2}px`,
             borderRadius: '50%',
-            boxShadow: '0 0 20px rgba(0,0,0,0.8)',
+            boxShadow: '0 10px 40px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.8)',
             zIndex: 50
           }}
         />
       </div>
 
       {/* Caption */}
-      <div className="mt-4 flex flex-col items-start opacity-60 group-hover:opacity-100 transition-opacity duration-500">
+      <div className="mt-4 flex flex-col items-start opacity-60 group-hover:opacity-100 transition-opacity duration-500 transform group-hover:translate-x-2 ease-out">
          <span className="font-serif text-white text-lg italic">{detail}</span>
          <span className="font-sans text-copper text-[10px] uppercase tracking-[0.2em]">{caption}</span>
       </div>
