@@ -19,6 +19,8 @@ const Concierge: React.FC<ConciergeProps> = ({ language }) => {
       intro: "Membership is by invitation or application only. Please complete the mandate to initiate your dossier review.",
       secureLine: "Secure Line",
       hq: "Headquarters",
+      bookingTitle: "Direct Scheduling",
+      bookingBtn: "Book Consultation",
       address: <>EMMAR Square,<br/>Dubai Downtown,<br/>UAE</>,
       placeholders: {
         name: "Full Name",
@@ -42,6 +44,8 @@ const Concierge: React.FC<ConciergeProps> = ({ language }) => {
       intro: "العضوية عن طريق الدعوة أو الطلب فقط. يرجى إكمال التفويض لبدء مراجعة ملفك.",
       secureLine: "الخط الآمن",
       hq: "المقر الرئيسي",
+      bookingTitle: "حجز مباشر",
+      bookingBtn: "احجز استشارة",
       address: <>إعمار سكوير،<br/>وسط مدينة دبي،<br/>الإمارات العربية المتحدة</>,
       placeholders: {
         name: "الاسم الكامل",
@@ -100,8 +104,22 @@ const Concierge: React.FC<ConciergeProps> = ({ language }) => {
           </p>
         </div>
 
-        <div className="mt-16 md:mt-0">
-          <div className="mb-8">
+        <div className="mt-16 md:mt-0 space-y-12">
+          
+          {/* Booking Section - Added */}
+          <div>
+             <h4 className="text-copper text-xs uppercase tracking-widest mb-4">{txt.bookingTitle}</h4>
+             <a 
+               href="https://calendar.app.google/nT2hJMRdeYsfXVpu8" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               className="inline-block px-8 py-3 border border-copper text-copper hover:bg-copper hover:text-white transition-all duration-300 text-xs uppercase tracking-[0.2em] font-bold"
+             >
+               {txt.bookingBtn}
+             </a>
+          </div>
+
+          <div>
             <h4 className="text-copper text-xs uppercase tracking-widest mb-2">{txt.secureLine}</h4>
             <p className="text-white font-serif">+971 58 935 3703</p>
           </div>
