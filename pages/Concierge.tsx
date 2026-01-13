@@ -9,6 +9,13 @@ const Concierge: React.FC<ConciergeProps> = ({ language }) => {
   const [submitted, setSubmitted] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mandate, setMandate] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    company: '',
+    linkedin: ''
+  });
+  
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Localization Content
@@ -73,8 +80,21 @@ const Concierge: React.FC<ConciergeProps> = ({ language }) => {
     { value: 'advisory', label: txt.options.advisory }
   ];
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Construct Mailto Link
+    const subject = `ANEEF Application: ${mandate ? mandateOptions.find(o => o.value === mandate)?.label : 'General Inquiry'}`;
+    const body = `Name: ${formData.name}%0D%0AEmail: ${formData.email}%0D%0ACompany: ${formData.company}%0D%0ALinkedIn: ${formData.linkedin}%0D%0AMandate Type: ${mandate || 'Not Specified'}`;
+    
+    // Open email client
+    window.location.href = `mailto:ameen.majali@gmail.com?subject=${subject}&body=${body}`;
+
     setSubmitted(true);
   };
 
@@ -106,7 +126,7 @@ const Concierge: React.FC<ConciergeProps> = ({ language }) => {
 
         <div className="mt-16 md:mt-0 space-y-12">
           
-          {/* Booking Section - Added */}
+          {/* Booking Section */}
           <div>
              <h4 className="text-copper text-xs uppercase tracking-widest mb-4">{txt.bookingTitle}</h4>
              <a 
@@ -122,6 +142,9 @@ const Concierge: React.FC<ConciergeProps> = ({ language }) => {
           <div>
             <h4 className="text-copper text-xs uppercase tracking-widest mb-2">{txt.secureLine}</h4>
             <p className="text-white font-serif">+971 58 935 3703</p>
+            <a href="mailto:ameen.majali@gmail.com" className="text-white/60 font-sans text-sm hover:text-copper transition-colors mt-1 block">
+              ameen.majali@gmail.com
+            </a>
           </div>
           <div>
             <h4 className="text-copper text-xs uppercase tracking-widest mb-2">{txt.hq}</h4>
@@ -140,6 +163,9 @@ const Concierge: React.FC<ConciergeProps> = ({ language }) => {
             <div className="group">
               <input 
                 type="text" 
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder={txt.placeholders.name} 
                 className="w-full bg-transparent border-b border-white/20 py-4 text-white placeholder-white/20 focus:outline-none focus:border-copper transition-colors font-serif text-xl"
                 required
@@ -149,6 +175,9 @@ const Concierge: React.FC<ConciergeProps> = ({ language }) => {
             <div className="group">
               <input 
                 type="email" 
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 placeholder={txt.placeholders.email} 
                 className="w-full bg-transparent border-b border-white/20 py-4 text-white placeholder-white/20 focus:outline-none focus:border-copper transition-colors font-serif text-xl"
                 required
@@ -158,6 +187,9 @@ const Concierge: React.FC<ConciergeProps> = ({ language }) => {
             <div className="group">
               <input 
                 type="text" 
+                name="company"
+                value={formData.company}
+                onChange={handleChange}
                 placeholder={txt.placeholders.company} 
                 className="w-full bg-transparent border-b border-white/20 py-4 text-white placeholder-white/20 focus:outline-none focus:border-copper transition-colors font-serif text-xl"
               />
@@ -166,6 +198,9 @@ const Concierge: React.FC<ConciergeProps> = ({ language }) => {
             <div className="group">
               <input 
                 type="text" 
+                name="linkedin"
+                value={formData.linkedin}
+                onChange={handleChange}
                 placeholder={txt.placeholders.linkedin} 
                 className="w-full bg-transparent border-b border-white/20 py-4 text-white placeholder-white/20 focus:outline-none focus:border-copper transition-colors font-serif text-xl"
               />
