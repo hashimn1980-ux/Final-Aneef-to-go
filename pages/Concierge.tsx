@@ -11,10 +11,62 @@ const Concierge: React.FC<ConciergeProps> = ({ language }) => {
   const [mandate, setMandate] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  // Localization Content
+  const content = {
+    [Language.EN]: {
+      titleLine1: "Application for",
+      titleLine2: "Visual Audit",
+      intro: "Membership is by invitation or application only. Please complete the mandate to initiate your dossier review.",
+      secureLine: "Secure Line",
+      hq: "Headquarters",
+      address: <>EMMAR Square,<br/>Dubai Downtown,<br/>UAE</>,
+      placeholders: {
+        name: "Full Name",
+        email: "Corporate Email",
+        company: "Company Name",
+        linkedin: "LinkedIn URL",
+        mandate: "Select Mandate Type"
+      },
+      options: {
+        audit: "Visual Audit",
+        retainer: "Monthly Retainer",
+        advisory: "Strategic Advisory"
+      },
+      submit: "Submit Mandate",
+      successTitle: "Mandate Received.",
+      successMsg: "The Directorate will review your profile within 48 hours. Secure communication channels will be established upon approval."
+    },
+    [Language.AR]: {
+      titleLine1: "طلب",
+      titleLine2: "التدقيق البصري",
+      intro: "العضوية عن طريق الدعوة أو الطلب فقط. يرجى إكمال التفويض لبدء مراجعة ملفك.",
+      secureLine: "الخط الآمن",
+      hq: "المقر الرئيسي",
+      address: <>إعمار سكوير،<br/>وسط مدينة دبي،<br/>الإمارات العربية المتحدة</>,
+      placeholders: {
+        name: "الاسم الكامل",
+        email: "البريد الإلكتروني للعمل",
+        company: "اسم الشركة",
+        linkedin: "رابط لينكد إن",
+        mandate: "اختر نوع التفويض"
+      },
+      options: {
+        audit: "تدقيق بصري",
+        retainer: "عقد شهري",
+        advisory: "استشارات استراتيجية"
+      },
+      submit: "إرسال التفويض",
+      successTitle: "تم استلام التفويض.",
+      successMsg: "ستقوم الإدارة بمراجعة ملفك خلال 48 ساعة. سيتم إنشاء قنوات اتصال آمنة عند الموافقة."
+    }
+  };
+
+  const txt = content[language];
+
   const mandateOptions = [
-    { value: 'audit', label: 'Visual Audit' },
-    { value: 'retainer', label: 'Monthly Retainer' },
-    { value: 'advisory', label: 'Strategic Advisory' }
+    { value: 'audit', label: txt.options.audit },
+    { value: 'retainer', label: txt.options.retainer },
+    { value: 'advisory', label: txt.options.advisory }
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -41,24 +93,22 @@ const Concierge: React.FC<ConciergeProps> = ({ language }) => {
       <div className="w-full md:w-[40%] bg-navy p-12 md:p-24 flex flex-col justify-between border-r border-white/5">
         <div>
           <h1 className="font-serif text-5xl md:text-6xl text-white mb-8 leading-tight">
-            Application for <br/><span className="text-copper italic">Visual Audit</span>
+            {txt.titleLine1} <br/><span className="text-copper italic">{txt.titleLine2}</span>
           </h1>
           <p className="text-white/80 font-sans text-sm leading-relaxed max-w-sm">
-            Membership is by invitation or application only. Please complete the mandate to initiate your dossier review.
+            {txt.intro}
           </p>
         </div>
 
         <div className="mt-16 md:mt-0">
           <div className="mb-8">
-            <h4 className="text-copper text-xs uppercase tracking-widest mb-2">Secure Line</h4>
+            <h4 className="text-copper text-xs uppercase tracking-widest mb-2">{txt.secureLine}</h4>
             <p className="text-white font-serif">+971 58 935 3703</p>
           </div>
           <div>
-            <h4 className="text-copper text-xs uppercase tracking-widest mb-2">Headquarters</h4>
+            <h4 className="text-copper text-xs uppercase tracking-widest mb-2">{txt.hq}</h4>
             <p className="text-white/80 text-sm font-sans">
-              EMMAR Square,<br/>
-              Dubai Downtown,<br/>
-              UAE
+              {txt.address}
             </p>
           </div>
         </div>
@@ -69,11 +119,10 @@ const Concierge: React.FC<ConciergeProps> = ({ language }) => {
         {!submitted ? (
           <form onSubmit={handleSubmit} className="w-full max-w-md space-y-12">
             
-            {/* Input Group */}
             <div className="group">
               <input 
                 type="text" 
-                placeholder="Full Name" 
+                placeholder={txt.placeholders.name} 
                 className="w-full bg-transparent border-b border-white/20 py-4 text-white placeholder-white/20 focus:outline-none focus:border-copper transition-colors font-serif text-xl"
                 required
               />
@@ -82,7 +131,7 @@ const Concierge: React.FC<ConciergeProps> = ({ language }) => {
             <div className="group">
               <input 
                 type="email" 
-                placeholder="Corporate Email" 
+                placeholder={txt.placeholders.email} 
                 className="w-full bg-transparent border-b border-white/20 py-4 text-white placeholder-white/20 focus:outline-none focus:border-copper transition-colors font-serif text-xl"
                 required
               />
@@ -91,7 +140,7 @@ const Concierge: React.FC<ConciergeProps> = ({ language }) => {
             <div className="group">
               <input 
                 type="text" 
-                placeholder="Company Name" 
+                placeholder={txt.placeholders.company} 
                 className="w-full bg-transparent border-b border-white/20 py-4 text-white placeholder-white/20 focus:outline-none focus:border-copper transition-colors font-serif text-xl"
               />
             </div>
@@ -99,7 +148,7 @@ const Concierge: React.FC<ConciergeProps> = ({ language }) => {
             <div className="group">
               <input 
                 type="text" 
-                placeholder="LinkedIn URL" 
+                placeholder={txt.placeholders.linkedin} 
                 className="w-full bg-transparent border-b border-white/20 py-4 text-white placeholder-white/20 focus:outline-none focus:border-copper transition-colors font-serif text-xl"
               />
             </div>
@@ -111,7 +160,7 @@ const Concierge: React.FC<ConciergeProps> = ({ language }) => {
                     onClick={() => setDropdownOpen(!dropdownOpen)}
                 >
                     <span className={mandate ? 'text-white font-serif text-xl' : 'font-serif text-xl'}>
-                        {mandate ? mandateOptions.find(o => o.value === mandate)?.label : 'Select Mandate Type'}
+                        {mandate ? mandateOptions.find(o => o.value === mandate)?.label : txt.placeholders.mandate}
                     </span>
                     <span className={`material-symbols-outlined transition-transform duration-300 ${dropdownOpen ? 'rotate-180' : ''}`}>keyboard_arrow_down</span>
                 </div>
@@ -134,12 +183,11 @@ const Concierge: React.FC<ConciergeProps> = ({ language }) => {
                 </div>
             </div>
 
-            {/* Luxury Ghost Submit Button (Updated Style) */}
             <button 
               type="submit" 
               className="w-full py-6 border border-copper bg-transparent text-copper hover:bg-copper/20 hover:text-white transition-all duration-500 ease-out uppercase text-xs font-bold tracking-[0.3em] hover:tracking-[0.4em]"
             >
-              Submit Mandate
+              {txt.submit}
             </button>
 
           </form>
@@ -149,9 +197,9 @@ const Concierge: React.FC<ConciergeProps> = ({ language }) => {
               <span className="material-symbols-outlined text-6xl text-gold-foil">verified</span>
               <div className="absolute inset-0 rounded-full animate-ping opacity-20 bg-copper"></div>
             </div>
-            <h2 className="font-serif text-3xl text-white mb-4">Mandate Received.</h2>
+            <h2 className="font-serif text-3xl text-white mb-4">{txt.successTitle}</h2>
             <p className="text-white/80 font-sans max-w-sm mx-auto leading-relaxed">
-              The Directorate will review your profile within 48 hours. Secure communication channels will be established upon approval.
+              {txt.successMsg}
             </p>
           </div>
         )}

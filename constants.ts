@@ -6,8 +6,8 @@ export const ASSETS = {
     HOME_HERO: 'https://github.com/hashimn1980-ux/ANEEF---Ultra-Luxury-Institutional-Finance/blob/main/public/assets/Assets/General/lady/logo%20(2).png?raw=true',
   },
   HOME: {
-    // The main molten copper background
-    HERO_BG: 'https://picsum.photos/seed/aneef-copper/1920/1080',
+    // Corrected: Dark abstract fluid texture (Gold/Black) to match the luxury aesthetic.
+    HERO_BG: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop',
     // The left card on the home page (Architecture/Building)
     MANDATE_BG: 'https://picsum.photos/seed/arch/800/1200',
     // The right card on the home page (Jet/Travel)
