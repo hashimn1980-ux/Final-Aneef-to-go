@@ -10,6 +10,7 @@ interface NavigationProps {
 
 const Navigation: React.FC<NavigationProps> = ({ currentPage, onNavigate, language, onToggleLanguage }) => {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,50 +33,83 @@ const Navigation: React.FC<NavigationProps> = ({ currentPage, onNavigate, langua
     { label: labels[language].CONC, page: Page.CONCIERGE },
   ];
 
+  const handleMobileNavigate = (page: Page) => {
+    onNavigate(page);
+    setMobileMenuOpen(false);
+  };
+
   return (
-    <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-in-out px-6 md:px-12 py-6 
-        ${scrolled ? 'bg-navy border-b border-copper' : 'bg-transparent'}`}
-    >
-      <div className="max-w-7xl mx-auto flex items-center justify-between relative">
-        
-        {/* Logo / Brand Marker (Visible when scrolled) */}
-        <div className={`text-gold-foil font-serif font-bold tracking-widest transition-opacity duration-300 ${scrolled ? 'opacity-100' : 'opacity-0'}`}>
-          ANEEF
+    <>
+      <nav
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-in-out px-6 md:px-12 py-6 
+          ${scrolled ? 'bg-navy border-b border-copper' : 'bg-transparent'}`}
+      >
+        <div className="max-w-7xl mx-auto flex items-center justify-between relative">
+          
+          {/* Logo / Brand Marker (Visible when scrolled) */}
+          <div className={`text-gold-foil font-serif font-bold tracking-widest transition-opacity duration-300 ${scrolled ? 'opacity-100' : 'opacity-0'}`}>
+            ANEEF
+          </div>
+
+          {/* Desktop Menu - Centered */}
+          <div className="hidden md:flex gap-12 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2">
+            {navLinks.map((link) => (
+              <button
+                key={link.page}
+                onClick={() => onNavigate(link.page)}
+                className={`text-xs uppercase tracking-[0.2em] font-sans transition-all duration-300
+                  ${currentPage === link.page ? 'text-white border-b border-copper pb-1' : 'text-white/60 hover:text-copper'}
+                  ${language === Language.AR ? 'font-arabic text-sm' : ''}
+                `}
+              >
+                {link.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Language Switcher */}
+          <button 
+            onClick={onToggleLanguage}
+            className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-copper hover:text-white transition-colors border border-copper/30 px-3 py-1 rounded-sm"
+          >
+            <span className={language === Language.EN ? 'text-white font-bold' : 'opacity-50'}>EN</span>
+            <span className="w-[1px] h-3 bg-copper/50"></span>
+            <span className={language === Language.AR ? 'text-white font-bold font-arabic' : 'opacity-50 font-arabic'}>عربي</span>
+          </button>
+
+          {/* Mobile Menu Icon (Absolute Right on mobile) */}
+          <button 
+            className="md:hidden text-copper ml-4 z-50 relative"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            <span className="material-symbols-outlined text-3xl">
+              {mobileMenuOpen ? 'close' : 'menu'}
+            </span>
+          </button>
         </div>
+      </nav>
 
-        {/* Desktop Menu - Centered */}
-        <div className="hidden md:flex gap-12 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2">
-          {navLinks.map((link) => (
-            <button
-              key={link.page}
-              onClick={() => onNavigate(link.page)}
-              className={`text-xs uppercase tracking-[0.2em] font-sans transition-all duration-300
-                ${currentPage === link.page ? 'text-white border-b border-copper pb-1' : 'text-white/60 hover:text-copper'}
-                ${language === Language.AR ? 'font-arabic text-sm' : ''}
-              `}
-            >
-              {link.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Language Switcher */}
-        <button 
-          onClick={onToggleLanguage}
-          className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-copper hover:text-white transition-colors border border-copper/30 px-3 py-1 rounded-sm"
-        >
-          <span className={language === Language.EN ? 'text-white font-bold' : 'opacity-50'}>EN</span>
-          <span className="w-[1px] h-3 bg-copper/50"></span>
-          <span className={language === Language.AR ? 'text-white font-bold font-arabic' : 'opacity-50 font-arabic'}>عربي</span>
-        </button>
-
-        {/* Mobile Menu Icon (Absolute Right on mobile) */}
-        <button className="md:hidden text-copper ml-4">
-          <span className="material-symbols-outlined">menu</span>
-        </button>
+      {/* Mobile Menu Overlay */}
+      <div className={`fixed inset-0 bg-navy z-40 flex flex-col items-center justify-center transition-all duration-500 md:hidden ${mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'}`}>
+         <div className="flex flex-col gap-8 text-center">
+            {navLinks.map((link) => (
+              <button
+                key={link.page}
+                onClick={() => handleMobileNavigate(link.page)}
+                className={`text-xl uppercase tracking-[0.2em] font-serif transition-colors duration-300
+                  ${currentPage === link.page ? 'text-gold-foil' : 'text-white hover:text-copper'}
+                  ${language === Language.AR ? 'font-arabic' : ''}
+                `}
+              >
+                {link.label}
+              </button>
+            ))}
+         </div>
+         <div className="absolute bottom-12 text-center">
+            <p className="text-white/30 text-xs uppercase tracking-widest">Est. 2024</p>
+         </div>
       </div>
-    </nav>
+    </>
   );
 };
 

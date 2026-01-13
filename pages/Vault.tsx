@@ -1,4 +1,4 @@
-import React, { useState, useRef, MouseEvent } from 'react';
+import React, { useState, useRef, MouseEvent, useEffect } from 'react';
 import { ASSETS } from '../constants';
 import { Language } from '../types';
 
@@ -61,18 +61,34 @@ const ITEMS: ArchiveItem[] = [
   { id: 'e15', collection: 'ESSENCE', src: ASSETS.ARCHIVE.ESSENCE[14], caption: 'Commission 163. Truth.', detail: 'Nothing hidden.' },
 ];
 
-const MagnifierImage: React.FC<{ src: string; caption: string; detail: string }> = ({ src, caption, detail }) => {
+interface MagnifierProps {
+  src: string;
+  caption: string;
+  detail: string;
+  onClick: () => void;
+}
+
+const MagnifierImage: React.FC<MagnifierProps> = ({ src, caption, detail, onClick }) => {
   const [showMagnifier, setShowMagnifier] = useState(false);
   const [xy, setXY] = useState({ x: 0, y: 0 });
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
   const magnifierSize = 160;
   const zoomLevel = 2.5;
 
-  const handleMouseEnter = () => setShowMagnifier(true);
+  useEffect(() => {
+    // Detect touch device to disable magnifier
+    setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
+  }, []);
+
+  const handleMouseEnter = () => {
+    if (!isTouchDevice) setShowMagnifier(true);
+  };
+  
   const handleMouseLeave = () => setShowMagnifier(false);
   
   const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
-    if (!imgRef.current) return;
+    if (isTouchDevice || !imgRef.current) return;
     const elem = imgRef.current;
     const { top, left, width, height } = elem.getBoundingClientRect();
     
@@ -90,9 +106,9 @@ const MagnifierImage: React.FC<{ src: string; caption: string; detail: string }>
   };
 
   return (
-    <div className="relative group mb-12">
+    <div className="relative group mb-12" onClick={onClick}>
       <div 
-        className="relative overflow-hidden cursor-crosshair rounded-sm"
+        className={`relative overflow-hidden rounded-sm ${isTouchDevice ? 'cursor-zoom-in' : 'cursor-crosshair'}`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onMouseMove={handleMouseMove}
@@ -102,34 +118,35 @@ const MagnifierImage: React.FC<{ src: string; caption: string; detail: string }>
           ref={imgRef}
           src={src}
           alt={caption}
+          loading="lazy"
           className="w-full h-auto object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-[1.5s] ease-out will-change-transform"
         />
 
-        {/* The Loupe */}
-        <div
-          style={{
-            position: 'absolute',
-            pointerEvents: 'none',
-            height: `${magnifierSize}px`,
-            width: `${magnifierSize}px`,
-            top: `${xy.y - magnifierSize / 2}px`,
-            left: `${xy.x - magnifierSize / 2}px`,
-            opacity: showMagnifier ? 1 : 0,
-            transition: 'opacity 0.2s ease-out',
-            border: '1px solid rgba(183, 121, 92, 0.4)',
-            backgroundColor: 'black',
-            backgroundImage: `url('${src}')`,
-            backgroundRepeat: 'no-repeat',
-            // We use offsetWidth to get the layout width, ignoring the scale transform for the background size base.
-            // This ensures the loupe zooms the 'original' image clearly.
-            backgroundSize: `${imgRef.current ? imgRef.current.offsetWidth * zoomLevel : 0}px ${imgRef.current ? imgRef.current.offsetHeight * zoomLevel : 0}px`,
-            backgroundPositionX: `${-xy.x * zoomLevel + magnifierSize / 2}px`,
-            backgroundPositionY: `${-xy.y * zoomLevel + magnifierSize / 2}px`,
-            borderRadius: '50%',
-            boxShadow: '0 10px 40px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.8)',
-            zIndex: 50
-          }}
-        />
+        {/* The Loupe - Only show on non-touch devices */}
+        {!isTouchDevice && (
+          <div
+            style={{
+              position: 'absolute',
+              pointerEvents: 'none',
+              height: `${magnifierSize}px`,
+              width: `${magnifierSize}px`,
+              top: `${xy.y - magnifierSize / 2}px`,
+              left: `${xy.x - magnifierSize / 2}px`,
+              opacity: showMagnifier ? 1 : 0,
+              transition: 'opacity 0.2s ease-out',
+              border: '1px solid rgba(183, 121, 92, 0.4)',
+              backgroundColor: 'black',
+              backgroundImage: `url('${src}')`,
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: `${imgRef.current ? imgRef.current.offsetWidth * zoomLevel : 0}px ${imgRef.current ? imgRef.current.offsetHeight * zoomLevel : 0}px`,
+              backgroundPositionX: `${-xy.x * zoomLevel + magnifierSize / 2}px`,
+              backgroundPositionY: `${-xy.y * zoomLevel + magnifierSize / 2}px`,
+              borderRadius: '50%',
+              boxShadow: '0 10px 40px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.8)',
+              zIndex: 50
+            }}
+          />
+        )}
       </div>
 
       {/* Caption */}
@@ -141,8 +158,39 @@ const MagnifierImage: React.FC<{ src: string; caption: string; detail: string }>
   );
 };
 
+const Lightbox: React.FC<{ item: ArchiveItem | null; onClose: () => void }> = ({ item, onClose }) => {
+  if (!item) return null;
+
+  return (
+    <div 
+      className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <button 
+        className="absolute top-6 right-6 text-white hover:text-copper transition-colors z-[101]"
+        onClick={onClose}
+      >
+        <span className="material-symbols-outlined text-4xl">close</span>
+      </button>
+
+      <div className="relative max-w-7xl max-h-[90vh] flex flex-col items-center" onClick={(e) => e.stopPropagation()}>
+        <img 
+          src={item.src} 
+          alt={item.caption} 
+          className="max-w-full max-h-[80vh] object-contain shadow-2xl border border-white/10"
+        />
+        <div className="mt-6 text-center">
+          <p className="text-white font-serif text-2xl italic mb-2">{item.detail}</p>
+          <p className="text-copper text-xs uppercase tracking-[0.3em]">{item.caption}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Vault: React.FC<VaultProps> = ({ language }) => {
   const [activeCollection, setActiveCollection] = useState<Collection>('POWER');
+  const [selectedItem, setSelectedItem] = useState<ArchiveItem | null>(null);
 
   const filteredItems = ITEMS.filter(item => item.collection === activeCollection);
 
@@ -161,7 +209,7 @@ const Vault: React.FC<VaultProps> = ({ language }) => {
         VOYAGE: "VOYAGE",
         ESSENCE: "ESSENCE"
       },
-      footer: "Use the Loupe to verify texture fidelity"
+      footer: "Select an image to expand • Use desktop for high-fidelity loupe"
     },
     [Language.AR]: {
       title: "الأرشيف",
@@ -176,7 +224,7 @@ const Vault: React.FC<VaultProps> = ({ language }) => {
         VOYAGE: "الرحلة",
         ESSENCE: "الأصالة"
       },
-      footer: "استخدم العدسة للتحقق من دقة التفاصيل"
+      footer: "اختر صورة للتكبير • استخدم الكمبيوتر لرؤية التفاصيل الدقيقة"
     }
   };
 
@@ -227,6 +275,7 @@ const Vault: React.FC<VaultProps> = ({ language }) => {
               src={item.src} 
               caption={item.caption} 
               detail={item.detail} 
+              onClick={() => setSelectedItem(item)}
             />
           ))}
         </div>
@@ -238,6 +287,9 @@ const Vault: React.FC<VaultProps> = ({ language }) => {
            {txt.footer}
          </p>
       </div>
+
+      {/* Lightbox Modal */}
+      <Lightbox item={selectedItem} onClose={() => setSelectedItem(null)} />
 
     </div>
   );

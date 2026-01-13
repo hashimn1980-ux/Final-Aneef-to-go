@@ -71,6 +71,7 @@ const Home: React.FC<HomeProps> = ({ onNavigate, language }) => {
              src={ASSETS.HOME.HERO_BG}
              className="w-full h-full object-cover blur-sm scale-110 animate-pulse-slow" 
              alt="Molten Copper" 
+             loading="eager"
            />
            {/* Darken overlay */}
            <div className="absolute inset-0 bg-black/30 transition-opacity duration-500"></div>
@@ -91,6 +92,7 @@ const Home: React.FC<HomeProps> = ({ onNavigate, language }) => {
                src={ASSETS.LOGO.HOME_HERO} 
                alt="ANEEF Emblem" 
                className="w-80 md:w-[30rem] lg:w-[40rem] h-auto object-contain drop-shadow-2xl" 
+               loading="eager"
              />
           </div>
         </div>
@@ -130,8 +132,13 @@ const Home: React.FC<HomeProps> = ({ onNavigate, language }) => {
       <section className="relative h-screen flex flex-col md:flex-row overflow-hidden">
         {/* Left: The Mandate (Institution) */}
         <div className="w-full md:w-1/2 h-1/2 md:h-full relative group cursor-pointer border-b md:border-b-0 md:border-r border-white/10" onClick={() => onNavigate(Page.INSTITUTION)}>
-          <div className="absolute inset-0 bg-navy transition-all duration-700 md:group-hover:w-[140%] z-0">
-             <div className="absolute inset-0 opacity-20 bg-cover bg-center mix-blend-overlay" style={{ backgroundImage: `url('${ASSETS.HOME.MANDATE_BG}')`}}></div>
+          <div className="absolute inset-0 bg-navy transition-all duration-700 md:group-hover:w-[140%] z-0 overflow-hidden">
+             <img 
+               src={ASSETS.HOME.MANDATE_BG} 
+               alt="The Mandate"
+               loading="lazy"
+               className="w-full h-full object-cover opacity-20 mix-blend-overlay transition-transform duration-700 group-hover:scale-110"
+             />
           </div>
           <div className="absolute inset-0 z-10 flex flex-col justify-center items-center md:items-start p-12 transition-transform duration-500 group-hover:scale-105">
             <h3 className="font-serif text-4xl md:text-5xl text-white mb-4">{txt.mandateTitle}</h3>
@@ -142,8 +149,13 @@ const Home: React.FC<HomeProps> = ({ onNavigate, language }) => {
 
         {/* Right: The Archive (Gallery) */}
         <div className="w-full md:w-1/2 h-1/2 md:h-full relative group cursor-pointer" onClick={() => onNavigate(Page.VAULT)}>
-          <div className="absolute inset-0 bg-navy-light transition-all duration-700 md:group-hover:w-[140%] md:group-hover:-translate-x-[20%] z-0">
-             <div className="absolute inset-0 opacity-20 bg-cover bg-center mix-blend-overlay" style={{ backgroundImage: `url('${ASSETS.HOME.ACCELERATE_BG}')`}}></div>
+          <div className="absolute inset-0 bg-navy-light transition-all duration-700 md:group-hover:w-[140%] md:group-hover:-translate-x-[20%] z-0 overflow-hidden">
+             <img 
+               src={ASSETS.HOME.ACCELERATE_BG} 
+               alt="The Archive"
+               loading="lazy"
+               className="w-full h-full object-cover opacity-20 mix-blend-overlay transition-transform duration-700 group-hover:scale-110"
+             />
           </div>
           <div className="absolute inset-0 z-10 flex flex-col justify-center items-center md:items-end p-12 text-right transition-transform duration-500 group-hover:scale-105">
             <h3 className="font-serif text-4xl md:text-5xl text-white mb-4">{txt.archiveTitle}</h3>

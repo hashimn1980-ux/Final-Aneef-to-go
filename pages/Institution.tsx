@@ -349,6 +349,7 @@ const Institution: React.FC<InstitutionProps> = ({ language }) => {
                    <img 
                      src={ASSETS.INSTITUTION.FOUNDER_PORTRAIT} 
                      alt="Elias Vane" 
+                     loading="lazy"
                      className="w-full h-full object-cover grayscale opacity-90 hover:grayscale-0 transition-all duration-700"
                    />
                    <div className="absolute -bottom-6 -left-6 bg-navy border border-copper px-8 py-4 shadow-2xl z-20">
