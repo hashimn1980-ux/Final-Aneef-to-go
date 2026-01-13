@@ -6,9 +6,11 @@ interface NavigationProps {
   onNavigate: (page: Page) => void;
   language: Language;
   onToggleLanguage: () => void;
+  theme: 'dark' | 'light';
+  onToggleTheme: () => void;
 }
 
-const Navigation: React.FC<NavigationProps> = ({ currentPage, onNavigate, language, onToggleLanguage }) => {
+const Navigation: React.FC<NavigationProps> = ({ currentPage, onNavigate, language, onToggleLanguage, theme, onToggleTheme }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -67,15 +69,29 @@ const Navigation: React.FC<NavigationProps> = ({ currentPage, onNavigate, langua
             ))}
           </div>
 
-          {/* Language Switcher */}
-          <button 
-            onClick={onToggleLanguage}
-            className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-copper hover:text-white transition-colors border border-copper/30 px-3 py-1 rounded-sm"
-          >
-            <span className={language === Language.EN ? 'text-white font-bold' : 'opacity-50'}>EN</span>
-            <span className="w-[1px] h-3 bg-copper/50"></span>
-            <span className={language === Language.AR ? 'text-white font-bold font-arabic' : 'opacity-50 font-arabic'}>عربي</span>
-          </button>
+          {/* Right Controls */}
+          <div className="flex items-center gap-4">
+            {/* Theme Toggle */}
+            <button 
+              onClick={onToggleTheme}
+              className="text-copper hover:text-white transition-colors"
+              title="Toggle Theme"
+            >
+              <span className="material-symbols-outlined text-xl">
+                {theme === 'dark' ? 'light_mode' : 'dark_mode'}
+              </span>
+            </button>
+
+            {/* Language Switcher */}
+            <button 
+              onClick={onToggleLanguage}
+              className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-copper hover:text-white transition-colors border border-copper/30 px-3 py-1 rounded-sm"
+            >
+              <span className={language === Language.EN ? 'text-white font-bold' : 'opacity-50'}>EN</span>
+              <span className="w-[1px] h-3 bg-copper/50"></span>
+              <span className={language === Language.AR ? 'text-white font-bold font-arabic' : 'opacity-50 font-arabic'}>عربي</span>
+            </button>
+          </div>
 
           {/* Mobile Menu Icon (Absolute Right on mobile) */}
           <button 

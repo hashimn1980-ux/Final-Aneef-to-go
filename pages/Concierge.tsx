@@ -110,7 +110,7 @@ const Concierge: React.FC<ConciergeProps> = ({ language }) => {
           <div>
              <h4 className="text-copper text-xs uppercase tracking-widest mb-4">{txt.bookingTitle}</h4>
              <a 
-               href="https://calendar.app.google/nT2hJMRdeYsfXVpu8" 
+               href="https://calendar.app.google/s2hwmb5jzHWXSfAf6" 
                target="_blank" 
                rel="noopener noreferrer"
                className="inline-block px-8 py-3 border border-copper text-copper hover:bg-copper hover:text-white transition-all duration-300 text-xs uppercase tracking-[0.2em] font-bold"

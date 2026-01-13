@@ -12,6 +12,7 @@ const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>(Page.HOME);
   const [pageTransitioning, setPageTransitioning] = useState(false);
   const [language, setLanguage] = useState<Language>(Language.EN);
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [loading, setLoading] = useState(true);
 
   // Handle Page Navigation
@@ -41,16 +42,22 @@ const App: React.FC = () => {
     setLanguage(prev => prev === Language.EN ? Language.AR : Language.EN);
   };
 
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
+
   return (
-    <>
+    <div className={theme === 'light' ? 'light-mode' : ''}>
       {loading && <Loader onComplete={() => setLoading(false)} />}
       
-      <div className={`min-h-screen bg-navy flex flex-col ${language === Language.AR ? 'text-right' : 'text-left'}`}>
+      <div className={`min-h-screen bg-navy flex flex-col transition-colors duration-500 ${language === Language.AR ? 'text-right' : 'text-left'}`}>
         <Navigation 
           currentPage={currentPage} 
           onNavigate={handleNavigate} 
           language={language}
           onToggleLanguage={toggleLanguage}
+          theme={theme}
+          onToggleTheme={toggleTheme}
         />
         
         <main 
@@ -64,7 +71,7 @@ const App: React.FC = () => {
         </main>
 
       </div>
-    </>
+    </div>
   );
 };
 

@@ -91,7 +91,7 @@ const Home: React.FC<HomeProps> = ({ onNavigate, language }) => {
              <img 
                src={ASSETS.LOGO.HOME_HERO} 
                alt="ANEEF Emblem" 
-               className="w-80 md:w-[30rem] lg:w-[40rem] h-auto object-contain drop-shadow-2xl" 
+               className="w-80 md:w-[30rem] lg:w-[40rem] h-auto object-contain drop-shadow-2xl invert-on-light" 
                loading="eager"
              />
           </div>

@@ -23,11 +23,12 @@
           extend: {
             colors: {
               navy: {
-                DEFAULT: '#0F2844',
-                light: '#1a2e45',
-                lighter: '#253b56',
-                dark: '#0A1C30',
+                DEFAULT: 'rgb(var(--bg-primary) / <alpha-value>)',
+                light: 'rgb(var(--bg-secondary) / <alpha-value>)',
+                lighter: 'rgb(var(--bg-tertiary) / <alpha-value>)',
+                dark: 'rgb(var(--bg-quaternary) / <alpha-value>)',
               },
+              white: 'rgb(var(--text-main) / <alpha-value>)', // Inverts: White in Dark Mode, Navy in Light Mode
               copper: {
                 DEFAULT: '#B7795C',
                 light: '#d49a7d',
@@ -75,12 +76,36 @@
       }
     </script>
     <style>
+      :root {
+        /* DARK THEME (DEFAULT) */
+        --bg-primary: 15 40 68;      /* #0F2844 */
+        --bg-secondary: 26 46 69;    /* #1a2e45 */
+        --bg-tertiary: 37 59 86;     /* #253b56 */
+        --bg-quaternary: 10 28 48;   /* #0A1C30 */
+        --text-main: 255 255 255;    /* White */
+      }
+
+      .light-mode {
+        /* LIGHT THEME (Cream/Paper) */
+        --bg-primary: 247 244 238;   /* #F7F4EE (Warm Cream) */
+        --bg-secondary: 255 255 255; /* White */
+        --bg-tertiary: 235 230 220;  /* Darker Cream */
+        --bg-quaternary: 225 220 210;
+        --text-main: 15 40 68;       /* Navy Blue Text */
+      }
+
       body {
-        background-color: #0F2844;
-        color: white;
+        background-color: rgb(var(--bg-primary));
+        color: rgb(var(--text-main));
         text-rendering: optimizeLegibility;
+        transition: background-color 0.5s ease, color 0.5s ease;
       }
       
+      /* Invert white logos in light mode to make them dark */
+      .light-mode .invert-on-light {
+        filter: invert(1);
+      }
+
       /* Enforce Thin Luxury Icons */
       .material-symbols-outlined {
         font-variation-settings:
@@ -95,7 +120,7 @@
         width: 6px;
       }
       ::-webkit-scrollbar-track {
-        background: #0F2844;
+        background: rgb(var(--bg-primary));
       }
       ::-webkit-scrollbar-thumb {
         background: #B7795C;
@@ -109,24 +134,6 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         animation: shine 4s linear infinite;
-      }
-
-      /* Champagne Gold Text Utility */
-      .text-champagne-gold {
-        background: linear-gradient(110deg, #F9F295 10%, #E0AA3E 45%, #F9F295 80%);
-        background-size: 200% 100%;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: shine 4s linear infinite;
-      }
-
-      /* Vault Gold Gradient */
-      .text-gradient-gold {
-          background: linear-gradient(to right, #ec9213, #fcd34d, #ec9213);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-size: 200% auto;
-          animation: shine 5s linear infinite;
       }
 
       /* Hide Scrollbar */
