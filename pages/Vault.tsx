@@ -267,16 +267,24 @@ const Vault: React.FC<VaultProps> = ({ language }) => {
       <div className="px-6 md:px-12 max-w-[1800px] mx-auto min-h-[60vh]">
         <div 
           key={activeCollection} 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-16 animate-fade-in"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-16"
         >
-          {filteredItems.map((item) => (
-            <MagnifierImage 
-              key={item.id} 
-              src={item.src} 
-              caption={item.caption} 
-              detail={item.detail} 
-              onClick={() => setSelectedItem(item)}
-            />
+          {filteredItems.map((item, index) => (
+            <div 
+               key={item.id}
+               className="animate-fade-in"
+               style={{ 
+                  animationDelay: `${index * 120}ms`,
+                  animationFillMode: 'both' // Ensures element is hidden (at 0% keyframe) before animation starts
+               }}
+            >
+              <MagnifierImage 
+                src={item.src} 
+                caption={item.caption} 
+                detail={item.detail} 
+                onClick={() => setSelectedItem(item)}
+              />
+            </div>
           ))}
         </div>
       </div>

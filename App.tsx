@@ -13,7 +13,8 @@ const App: React.FC = () => {
   const [pageTransitioning, setPageTransitioning] = useState(false);
   const [language, setLanguage] = useState<Language>(Language.EN);
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-  const [loading, setLoading] = useState(true);
+  // Loader disabled by setting initial state to false
+  const [loading, setLoading] = useState(false);
 
   // Handle Page Navigation
   const handleNavigate = (page: Page) => {
@@ -48,6 +49,7 @@ const App: React.FC = () => {
 
   return (
     <div className={theme === 'light' ? 'light-mode' : ''}>
+      {/* Loader removed from rendering for immediate access */}
       {loading && <Loader onComplete={() => setLoading(false)} />}
       
       <div className={`min-h-screen bg-navy flex flex-col transition-colors duration-500 ${language === Language.AR ? 'text-right' : 'text-left'}`}>

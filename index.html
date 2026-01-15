@@ -49,12 +49,16 @@
             backgroundImage: {
               'gold-gradient': 'linear-gradient(110deg, #bf953f 0%, #b38728 20%, #fcf6ba 45%, #fbf5b7 55%, #b38728 80%, #bf953f 100%)',
               'gold-text-gradient': 'linear-gradient(to right, #ec9213, #fcd34d, #ec9213)',
+              'gold-molten': 'linear-gradient(135deg, #bf953f 0%, #fcf6ba 50%, #b38728 100%)',
             },
             animation: {
               'shine': 'shine 4s linear infinite',
               'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
               'flash': 'flash 0.6s ease-out forwards',
               'fade-in': 'fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              'liquid-1': 'liquid1 20s infinite alternate ease-in-out',
+              'liquid-2': 'liquid2 25s infinite alternate ease-in-out',
+              'liquid-3': 'liquid3 18s infinite alternate ease-in-out',
             },
             keyframes: {
               shine: {
@@ -69,6 +73,18 @@
               fadeIn: {
                 '0%': { opacity: '0', transform: 'translateY(20px)', filter: 'blur(10px)' },
                 '100%': { opacity: '1', transform: 'translateY(0)', filter: 'blur(0)' },
+              },
+              liquid1: {
+                '0%': { transform: 'translate(-10%, -10%) scale(1)' },
+                '100%': { transform: 'translate(10%, 10%) scale(1.2)' },
+              },
+              liquid2: {
+                '0%': { transform: 'translate(10%, -5%) rotate(0deg)' },
+                '100%': { transform: 'translate(-10%, 5%) rotate(90deg)' },
+              },
+              liquid3: {
+                '0%': { transform: 'translate(0, 10%) scale(1)' },
+                '100%': { transform: 'translate(0, -10%) scale(0.8)' },
               }
             }
           },
@@ -125,6 +141,12 @@
       ::-webkit-scrollbar-thumb {
         background: #B7795C;
         border-radius: 3px;
+      }
+
+      /* Liquid Gold Gooey Container */
+      .liquid-container {
+        filter: contrast(18) brightness(1.1);
+        background: black;
       }
 
       /* Gold Foil Text Utility */

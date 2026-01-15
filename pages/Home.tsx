@@ -63,25 +63,23 @@ const Home: React.FC<HomeProps> = ({ onNavigate, language }) => {
       {/* Hero Section */}
       <section 
         ref={containerRef}
-        className="relative h-screen w-full overflow-hidden bg-black flex items-center justify-center"
+        className="relative h-screen w-full overflow-hidden bg-navy flex items-center justify-center"
       >
-        {/* Molten Copper Background Simulation */}
-        <div className="absolute inset-0 z-0 opacity-80">
-           <img 
-             src={ASSETS.HOME.HERO_BG}
-             className="w-full h-full object-cover blur-sm scale-110 animate-pulse-slow" 
-             alt="Molten Copper" 
-             loading="eager"
-           />
-           {/* Darken overlay */}
-           <div className="absolute inset-0 bg-black/30 transition-opacity duration-500"></div>
+        {/* Restored Dark Navy Background Texture */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src={ASSETS.HOME.HERO_BG} 
+            alt="Texture" 
+            className="w-full h-full object-cover opacity-30 mix-blend-overlay" 
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-navy via-navy/90 to-black/60"></div>
         </div>
 
-        {/* Torchlight Effect - Increased Radius and Intensity */}
+        {/* Torchlight Effect */}
         <div 
           className="absolute inset-0 z-10 pointer-events-none mix-blend-soft-light transition-opacity duration-75"
           style={{
-            background: `radial-gradient(900px circle at ${mousePos.x}px ${mousePos.y}px, rgba(183, 121, 92, 0.25) 0%, rgba(15, 40, 68, 0.7) 40%, rgba(15, 40, 68, 1) 100%)`
+            background: `radial-gradient(800px circle at ${mousePos.x}px ${mousePos.y}px, rgba(183, 121, 92, 0.15) 0%, rgba(15, 40, 68, 0.95) 45%, rgba(15, 40, 68, 1) 100%)`
           }}
         />
 
